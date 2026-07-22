@@ -1,0 +1,42 @@
+from app.models.market import Asset, Candle, MarketSnapshot, UserFavorite
+from app.models.portfolio import (
+    ActivityEvent,
+    AiAnalysisSummary,
+    AiRecommendation,
+    AllocationSlice,
+    Holding,
+    MonthlyReturn,
+    OpenPosition,
+    PerformancePoint,
+    Portfolio,
+    PortfolioHealthMetric,
+    PortfolioTimelineEvent,
+    TradingSignal,
+    WatchlistItem,
+)
+from app.models.user import AuditLog, EmailVerification, RefreshToken, User, UserRole
+
+__all__ = [
+    "ActivityEvent",
+    "AiAnalysisSummary",
+    "AiRecommendation",
+    "AllocationSlice",
+    "Asset",
+    "AuditLog",
+    "Candle",
+    "EmailVerification",
+    "Holding",
+    "MarketSnapshot",
+    "MonthlyReturn",
+    "OpenPosition",
+    "PerformancePoint",
+    "Portfolio",
+    "PortfolioHealthMetric",
+    "PortfolioTimelineEvent",
+    "RefreshToken",
+    "TradingSignal",
+    "User",
+    "UserFavorite",
+    "UserRole",
+    "WatchlistItem",
+]
