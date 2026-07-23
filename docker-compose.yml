@@ -29,6 +29,9 @@ services:
       timeout: 3s
       retries: 10
 
+  # Optional local reference — run worker on host with venv for Windows:
+  # celery -A app.tasks.celery_app.celery_app worker -B -l info
+
 volumes:
   quantai_pg_data:
   quantai_redis_data:

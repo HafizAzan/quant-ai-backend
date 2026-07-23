@@ -1,4 +1,35 @@
+from app.models.alert import (
+    Alert,
+    AlertCondition,
+    AlertTimelineEvent,
+    AlertTrigger,
+    AlertWatchItem,
+    NotificationChannel,
+)
+from app.models.analysis import AiAnalysis
+from app.models.chat import ChatMessage, ChatThread, CommandExecution
+from app.models.exchange import ExchangeAccount
+from app.models.journal import JournalCoachItem, JournalEntry, JournalProfile, JournalTimelineEvent
+from app.models.live import (
+    LiveAccount,
+    LiveActivityEvent,
+    LiveBalance,
+    LiveEmergencyEvent,
+    LiveGuardianAlert,
+    LiveOrder,
+    LivePosition,
+)
 from app.models.market import Asset, Candle, MarketSnapshot, UserFavorite
+from app.models.notification import Notification
+from app.models.paper import (
+    PaperAccount,
+    PaperEquityPoint,
+    PaperFill,
+    PaperOrder,
+    PaperPosition,
+    PaperPositionEvent,
+    PaperSentinelSuggestion,
+)
 from app.models.portfolio import (
     ActivityEvent,
     AiAnalysisSummary,
@@ -14,29 +45,70 @@ from app.models.portfolio import (
     TradingSignal,
     WatchlistItem,
 )
+from app.models.search import SearchPin, SearchRecent
+from app.models.settings import UserApiKey, UserSettings
+from app.models.strategy import BacktestRun, Strategy, StrategyEdge, StrategyNode
 from app.models.user import AuditLog, EmailVerification, RefreshToken, User, UserRole
 
 __all__ = [
     "ActivityEvent",
+    "AiAnalysis",
     "AiAnalysisSummary",
     "AiRecommendation",
+    "Alert",
+    "AlertCondition",
+    "AlertTimelineEvent",
+    "AlertTrigger",
+    "AlertWatchItem",
     "AllocationSlice",
     "Asset",
     "AuditLog",
+    "BacktestRun",
     "Candle",
+    "ChatMessage",
+    "ChatThread",
+    "CommandExecution",
     "EmailVerification",
+    "ExchangeAccount",
     "Holding",
+    "JournalCoachItem",
+    "JournalEntry",
+    "JournalProfile",
+    "JournalTimelineEvent",
+    "LiveAccount",
+    "LiveActivityEvent",
+    "LiveBalance",
+    "LiveEmergencyEvent",
+    "LiveGuardianAlert",
+    "LiveOrder",
+    "LivePosition",
     "MarketSnapshot",
     "MonthlyReturn",
+    "Notification",
+    "NotificationChannel",
     "OpenPosition",
+    "PaperAccount",
+    "PaperEquityPoint",
+    "PaperFill",
+    "PaperOrder",
+    "PaperPosition",
+    "PaperPositionEvent",
+    "PaperSentinelSuggestion",
     "PerformancePoint",
     "Portfolio",
     "PortfolioHealthMetric",
     "PortfolioTimelineEvent",
     "RefreshToken",
+    "SearchPin",
+    "SearchRecent",
+    "Strategy",
+    "StrategyEdge",
+    "StrategyNode",
     "TradingSignal",
     "User",
+    "UserApiKey",
     "UserFavorite",
     "UserRole",
+    "UserSettings",
     "WatchlistItem",
 ]

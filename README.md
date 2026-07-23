@@ -1,6 +1,6 @@
 # QuantAI Backend
 
-FastAPI ˝ PostgreSQL ˝ Redis ˝ Celery ˝ JWT
+FastAPI ù PostgreSQL ù Redis ù Celery ù JWT
 
 ## Docs first
 
@@ -25,7 +25,7 @@ alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
 
-API docs: http://localhost:3000 ˝ backend http://localhost:8000/docs
+API docs: http://localhost:3000 ù backend http://localhost:8000/docs
 
 ### Auth endpoints (MVP #1)
 
@@ -69,4 +69,212 @@ Seed (after register/login  attaches to users without a portfolio):
 ```bash
 .\.venv\Scripts\python -m app.scripts.seed_portfolio
 .\.venv\Scripts\python -m app.scripts.seed_portfolio --email you@example.com
+```
+
+### Paper Trading (MVP #4)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/paper-trading` | Desk snapshot (metrics, positions, pending, history) |
+| GET | `/api/v1/paper-trading/equity?range=1D` | Equity curve |
+| POST | `/api/v1/paper-trading/orders/preview` | Trade preview + AI warnings |
+| POST | `/api/v1/paper-trading/orders` | Place market/limit order |
+| POST | `/api/v1/paper-trading/orders/{id}/cancel` | Cancel pending limit |
+| POST | `/api/v1/paper-trading/positions/{id}/close` | Close open position |
+| GET | `/api/v1/paper-trading/positions/{id}` | Position drawer detail |
+| PATCH | `/api/v1/paper-trading/mode` | Practice / Learning / Exam |
+| POST | `/api/v1/paper-trading/ask-ai` | Ask AI prompts |
+| POST | `/api/v1/paper-trading/sentinel` | Apply / ignore sentinel |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_paper
+```
+
+### AI Analysis (MVP #5)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/analysis/workspace` | Chart workspace (`symbol`, `timeframe`) |
+| POST | `/api/v1/analysis` | Generate analysis (optional `save`) |
+| GET | `/api/v1/analysis` | List analyses (`saved_only`, `symbol`) |
+| GET | `/api/v1/analysis/{id}` | Get one analysis |
+| POST | `/api/v1/analysis/{id}/save` | Mark saved |
+| DELETE | `/api/v1/analysis/{id}` | Delete |
+| POST | `/api/v1/analysis/{id}/alert-draft` | Alert draft from levels |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_analysis
+```
+
+### Alerts (MVP #6 ù price first)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/alerts/desk` | Metrics, channels, history, analytics, watchlist |
+| GET | `/api/v1/alerts` | List (`tab=all\|price\|technical\|ai`, search) |
+| POST | `/api/v1/alerts` | Create price alert |
+| POST | `/api/v1/alerts/evaluate` | Run price rule engine once |
+| GET | `/api/v1/alerts/{id}` | Alert detail + timeline |
+| POST | `/api/v1/alerts/{id}/toggle` | Enable / disable |
+| POST | `/api/v1/alerts/{id}/mute` | Mute |
+| POST | `/api/v1/alerts/{id}/snooze` | Snooze (`minutes`) |
+| POST | `/api/v1/alerts/{id}/archive` | Archive |
+| DELETE | `/api/v1/alerts/{id}` | Soft delete |
+| POST | `/api/v1/alerts/channels/{id}/test` | Test channel delivery |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_alerts
+```
+
+### Journal (MVP #7)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/journal/desk` | Evolution, analytics, patterns, coach, filters |
+| GET | `/api/v1/journal` | List + grouped (`date_range`, `asset`, `strategy`, `outcome`, `query`) |
+| POST | `/api/v1/journal` | Create entry |
+| GET | `/api/v1/journal/{id}` | Entry detail + timeline + candles |
+| PATCH | `/api/v1/journal/{id}` | Update notes / tags / outcome |
+| DELETE | `/api/v1/journal/{id}` | Delete entry |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_journal
+.\.venv\Scripts\python -m app.scripts.seed_journal --email you@example.com
+```
+
+### AI Chat + Commands (MVP #8)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/chat/workspace` | Context panel, prompts, actions, command registry |
+| GET | `/api/v1/chat/threads` | Recent chats |
+| POST | `/api/v1/chat/threads` | New chat |
+| GET | `/api/v1/chat/threads/{id}` | Thread + messages |
+| PATCH | `/api/v1/chat/threads/{id}` | Rename |
+| DELETE | `/api/v1/chat/threads/{id}` | Delete |
+| POST | `/api/v1/chat/threads/{id}/messages` | Send message (command resolve or heuristic AI) |
+| GET | `/api/v1/commands` | Platform command registry (`q` filter) |
+| GET/POST | `/api/v1/commands/resolve` | NL / slash command intent resolver |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_chat
+.\.venv\Scripts\python -m app.scripts.seed_chat --email you@example.com
+```
+
+### Strategies + Backtest (MVP #9)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/strategies/workspace` | Filters, AI actions, toolbar, pipeline |
+| GET | `/api/v1/strategies` | List (`query`, `market`, `exchange`, `type`, `status`, `risk`) |
+| POST | `/api/v1/strategies` | Create strategy + default canvas |
+| POST | `/api/v1/strategies/generate` | NL prompt ? draft strategy + graph |
+| GET | `/api/v1/strategies/{id}` | Detail + canvas + validation + latest backtest |
+| PATCH | `/api/v1/strategies/{id}` | Update metadata |
+| PUT | `/api/v1/strategies/{id}/canvas` | Save nodes/edges |
+| POST | `/api/v1/strategies/{id}/duplicate` | Duplicate |
+| POST | `/api/v1/strategies/{id}/archive` | Archive |
+| POST | `/api/v1/strategies/{id}/deploy` | Deploy (requires backtest) |
+| POST | `/api/v1/strategies/{id}/backtest` | Run mock backtest (sync completed) |
+| GET | `/api/v1/strategies/{id}/backtests` | Backtest history |
+| POST | `/api/v1/strategies/{id}/ai-assist` | Optimize / explain / risk tips |
+| DELETE | `/api/v1/strategies/{id}` | Delete |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_strategies
+.\.venv\Scripts\python -m app.scripts.seed_strategies --email you@example.com
+```
+
+### Live Trading (MVP #10 ó simulated exchange)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/live-trading` | Desk: balances, positions, orders, risk, guardian, activity |
+| GET | `/api/v1/live-trading/positions/{id}` | Position drawer detail |
+| POST | `/api/v1/live-trading/auto-trading` | Toggle auto trading |
+| PATCH | `/api/v1/live-trading/settings` | Leverage / margin type |
+| POST | `/api/v1/live-trading/orders/preview` | AI approval + confirm payload |
+| POST | `/api/v1/live-trading/orders` | Place order (`confirm=true`) |
+| POST | `/api/v1/live-trading/orders/{id}/cancel` | Cancel one |
+| POST | `/api/v1/live-trading/orders/cancel-all` | Cancel all open |
+| POST | `/api/v1/live-trading/positions/{id}/action` | close / reverse / partial / breakeven / trail |
+| POST | `/api/v1/live-trading/emergency` | Kill switch actions + audit |
+| POST | `/api/v1/live-trading/ask-ai` | Trade assistant prompts |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_live
+.\.venv\Scripts\python -m app.scripts.seed_live --email you@example.com
+```
+
+### Settings (MVP #11)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/settings` | Full settings snapshot |
+| PATCH | `/api/v1/settings/profile` | Update full name |
+| PATCH | `/api/v1/settings/security` | Session timeout / disable 2FA |
+| POST | `/api/v1/settings/security/2fa/enroll` | Start TOTP enrollment |
+| POST | `/api/v1/settings/security/2fa/verify` | Verify TOTP ? enable 2FA |
+| POST | `/api/v1/settings/api-keys` | Generate platform API key (secret once) |
+| DELETE | `/api/v1/settings/api-keys/{id}` | Revoke key |
+| PATCH | `/api/v1/settings/ai-model` | Engine / temperature / autonomous |
+| PATCH | `/api/v1/settings/risk` | Drawdown / size / leverage / critical stop |
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_settings
+```
+
+### Notifications (MVP #12)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/notifications` | Inbox (`unread_only`, page) |
+| POST | `/api/v1/notifications/{id}/read` | Mark one read |
+| POST | `/api/v1/notifications/read-all` | Mark all read |
+| DELETE | `/api/v1/notifications/{id}` | Dismiss |
+
+Alert evaluation also creates inbox rows + Redis pub for WebSocket clients.
+
+```bash
+.\.venv\Scripts\python -m app.scripts.seed_notifications
+```
+
+### Search / Command Palette (MVP #13)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/search?q=` | Unified catalog + DB assets/strategies/alerts/journal |
+| GET/POST | `/api/v1/search/recents` | Recent searches |
+| GET/POST | `/api/v1/search/pins` | Pin items |
+| DELETE | `/api/v1/search/pins/{item_id}` | Unpin |
+
+NL commands remain on `/api/v1/commands/resolve`.
+
+### Exchange connector (MVP #14)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/exchange/accounts` | Connected exchange accounts |
+| POST | `/api/v1/exchange/connect` | Store encrypted API key/secret |
+| POST | `/api/v1/exchange/accounts/{id}/disconnect` | Deactivate |
+| POST | `/api/v1/exchange/sync` | Sync balances (Binance or simulated) |
+| POST | `/api/v1/exchange/orders` | Place order via adapter (+ Risk Agent check) |
+
+Use `api_key` / `api_secret` starting with `sim_` for local simulated adapter. Real Binance uses testnet by default (`is_testnet=true`).
+
+### WebSocket + Celery + Agents
+
+| Piece | How |
+|-------|-----|
+| WS | `WS /api/v1/ws?token=<access_token>` ó prices, notifications, system |
+| Celery | `celery -A app.tasks.celery_app.celery_app worker -B -l info` |
+| Price ticks | task every 5s ? Redis `quantai:prices` |
+| Alert eval | beat every 2m ? evaluate all users |
+| Chat Agent | uses `OPENAI_API_KEY` when set; else heuristic |
+| Risk Agent | enforces Settings risk limits on `/exchange/orders` |
+
+```bash
+pip install -r requirements.txt
+alembic upgrade head
+celery -A app.tasks.celery_app.celery_app worker -B -l info
 ```
