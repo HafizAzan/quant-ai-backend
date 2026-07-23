@@ -91,7 +91,7 @@ async def seed_all(email: str) -> None:
 async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--email", default="azanahmedkhan.dev@gmail.com")
-    parser.add_argument("--password", default="Az@n123")
+    parser.add_argument("--password", default="Az@n2007")
     parser.add_argument("--name", default="Azan Ahmed Khan")
     args = parser.parse_args()
 
